@@ -1,0 +1,12 @@
+[app]
+%{ for index_app, ip_app in app_private_ip_list ~}
+app${index_app}	ansible_host=${ip_app}	instance_id=${app_instance_id_list[index_app]}
+%{ endfor ~}
+
+[lb]
+%{ for index_lb, ip_lb in lb_private_ip_list ~}
+lb${index_lb}	ansible_host=${ip_lb}
+%{ endfor ~}
+
+[iscsi-target]
+iscsi	ansible_host=${iscsi_node_ip}
