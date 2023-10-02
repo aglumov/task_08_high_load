@@ -5,8 +5,16 @@ app${index_app}	ansible_host=${ip_app}	instance_id=${app_instance_id_list[index_
 
 [lb]
 %{ for index_lb, ip_lb in lb_private_ip_list ~}
-lb${index_lb}	ansible_host=${ip_lb}
+lb${index_lb}	ansible_host=${ip_lb}	instance_id=${lb_instance_id_list[index_lb]}
+%{ endfor ~}
+
+[db]
+%{ for index_db, ip_db in db_private_ip_list ~}
+db${index_db}	ansible_host=${ip_db}
 %{ endfor ~}
 
 [iscsi-target]
 iscsi	ansible_host=${iscsi_node_ip}
+
+[all:vars]
+ansible_user=ec2-user

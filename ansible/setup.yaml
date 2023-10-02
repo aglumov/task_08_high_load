@@ -4,6 +4,7 @@
   become: true
 
   vars:
+    eip: "178.216.96.248"
     common_packages:
     - python3-pip
     - pcs
@@ -16,6 +17,22 @@
     - lvm2-lockd
     - gfs2-utils
     password: "21485b12392b4a4c957aef3decfbf7a8"
+    db_packages:
+    - mariadb-server
+    - python3-pip
+    lb_packages:
+    - nginx
+    - python3-pip
+    - keepalived
+    app_packages:
+    - nginx
+    - php-fpm
+    - php-mysql
+    - unzip
+    wp_db_name: "wordpress"
+    wp_db_user: "wordpress"
+    wp_db_pass: "wordpresspassword"
+    wp_db_host: "{{ hostvars['db0'].ansible_host }}"      
 
   tasks:
   - name: Install iSCSI target
@@ -33,3 +50,36 @@
   - name: Configure cluster
     include_tasks: "configure_cluster.yaml"
     when: inventory_hostname in groups["app"]
+
+  - name: Install and configure Database
+    include_tasks: "db.yaml"
+    when: inventory_hostname in groups["db"]
+
+  - name: Install and configure Apps
+    include_tasks: "app.yaml"
+    when: inventory_hostname in groups["app"]
+
+  - name: Install and configure Loadbalancer
+    include_tasks: "lb.yaml"
+    when: inventory_hostname in groups["lb"]
+
+  handlers:
+  - name: restart php-fpm
+    ansible.builtin.systemd:
+      name: "php8.1-fpm.service"
+      state: restarted
+  
+  - name: nginx reload
+    ansible.builtin.systemd:
+      name: "nginx"
+      state: reloaded
+
+  - name: restart mariadb-server
+    ansible.builtin.systemd:
+      name: "mariadb.service"
+      state: restarted
+
+  - name: restart keepalived
+    ansible.builtin.systemd:
+      name: "keepalived.service"
+      state: restarted

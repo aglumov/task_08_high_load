@@ -1,0 +1,4 @@
+#!/bin/bash
+
+/usr/local/bin/aws ec2 disassociate-address --public-ip {{ eip }}
+/usr/local/bin/aws ec2 associate-address --public-ip {{ eip }} --instance-id {{ instance_id }}

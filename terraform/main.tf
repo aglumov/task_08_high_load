@@ -1,5 +1,5 @@
 resource "aws_network_interface" "eni-app" {
-  count     = 3
+  count     = 2
   subnet_id = var.subnet[count.index]
 
   tags = {
@@ -8,7 +8,7 @@ resource "aws_network_interface" "eni-app" {
 }
 
 resource "aws_instance" "app" {
-  count         = 3
+  count         = 2
   ami           = "cmi-5DB160EF"
   instance_type = "c5.large"
 
@@ -36,7 +36,7 @@ resource "aws_instance" "app" {
 }
 
 resource "aws_ebs_volume" "iscsi_vol" {
-  availability_zone = "ru-msk-vol51"
+  availability_zone = "ru-msk-vol52"
   size              = 32
   type              = "gp2"
 
@@ -53,7 +53,7 @@ resource "aws_volume_attachment" "iscsi_vol_attach" {
 }
 
 resource "aws_network_interface" "eni-iscsi" {
-  subnet_id = "subnet-738FFC80"
+  subnet_id = "subnet-05E8BE02"
 
   tags = {
     Name = "primary network interface for eni-iscsi"
@@ -87,7 +87,7 @@ resource "aws_instance" "iscsi" {
 }
 
 resource "aws_network_interface" "eni-lb" {
-  count     = 2
+  count     = var.lb_count
   subnet_id = var.subnet[count.index]
 
   tags = {
@@ -96,7 +96,7 @@ resource "aws_network_interface" "eni-lb" {
 }
 
 resource "aws_instance" "lb" {
-  count         = 2
+  count         = var.lb_count
   ami           = "cmi-5DB160EF"
   instance_type = "c5.large"
 
@@ -115,6 +115,43 @@ resource "aws_instance" "lb" {
     volume_type = "gp2"
     tags = {
       "Name" = "Disk for lb${count.index}"
+    }
+
+  }
+
+  key_name = "AGlumov"
+
+}
+
+resource "aws_network_interface" "eni-db" {
+  count     = 1
+  subnet_id = var.subnet[count.index]
+
+  tags = {
+    Name = "primary network interface for eni-db-${count.index}"
+  }
+}
+
+resource "aws_instance" "db" {
+  count         = 1
+  ami           = "cmi-5DB160EF"
+  instance_type = "c5.large"
+
+  tags = {
+    Name = "db${count.index}"
+  }
+
+  network_interface {
+    network_interface_id = aws_network_interface.eni-db[count.index].id
+    device_index         = 0
+  }
+
+
+  root_block_device {
+    volume_size = 32
+    volume_type = "gp2"
+    tags = {
+      "Name" = "Disk for db${count.index}"
     }
 
   }

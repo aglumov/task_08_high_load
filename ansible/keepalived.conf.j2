@@ -1,0 +1,42 @@
+global_defs {
+    enable_script_security
+    script_user root
+}
+
+vrrp_script nginx {
+    script "/usr/bin/killall -0 nginx"
+    interval 2
+    weight 10
+    user root
+} 
+
+vrrp_instance VRRP1 {
+{% if inventory_hostname == 'lb0' %}
+    state MASTER
+    priority 201
+{% else %}
+    state BACKUP
+    priority 200
+{% endif %}
+    interface ens3
+    virtual_router_id 100
+    advert_int 1
+    garp_master_delay 10
+    debug 1
+    authentication {
+        auth_type PASS
+        auth_pass 1066
+    }
+    unicast_src_ip {{ hostvars[inventory_hostname].ansible_host }}
+    unicast_peer {
+{% for i in groups.lb %}
+{% if inventory_hostname != i %}
+        {{ hostvars[i].ansible_host }}
+{% endif %}
+{% endfor %}
+    }
+    track_script {
+        nginx
+    }
+    notify_master "/etc/keepalived/master.sh"
+} 
