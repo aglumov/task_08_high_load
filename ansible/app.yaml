@@ -37,6 +37,7 @@
     remote_src: yes
     owner: www-data
     group: www-data
+  run_once: true
     
 - name: Configure wordpress
   ansible.builtin.template:
@@ -44,3 +45,4 @@
     dest: "/var/www/wordpress/wp-config.php"
     owner: "www-data"
     group: "www-data"
+  run_once: true

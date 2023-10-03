@@ -74,7 +74,7 @@ resource "aws_instance" "iscsi" {
   }
 
   root_block_device {
-    volume_size = 8
+    volume_size = 32
     volume_type = "gp2"
     tags = {
       "Name" = "Disk for iscsi instance"

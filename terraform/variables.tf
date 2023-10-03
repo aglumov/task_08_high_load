@@ -1,5 +1,5 @@
 variable "subnet" {
-  type    = list(string)
+  type = list(string)
   #default = ["subnet-F76666A1", "subnet-738FFC80", "subnet-05E8BE02"]
   default = ["subnet-F76666A1", "subnet-05E8BE02"]
 }
@@ -13,6 +13,6 @@ variable "cc_secret_key" {
 }
 
 variable "lb_count" {
-  type = number
+  type    = number
   default = 2
 }
