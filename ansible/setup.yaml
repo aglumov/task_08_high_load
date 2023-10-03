@@ -39,6 +39,10 @@
     include_tasks: "install_iscsi-target.yaml"
     when: inventory_hostname in groups["iscsi-target"]
  
+  - name: Install and configure Database
+    include_tasks: "configure_db.yaml"
+    when: inventory_hostname in groups["db"]
+
   - name: Install iSCSI initiator
     include_tasks: "install_iscsi-initiator.yaml"
     when: inventory_hostname in groups["app"]
@@ -50,10 +54,6 @@
   - name: Configure cluster
     include_tasks: "configure_cluster.yaml"
     when: inventory_hostname in groups["app"]
-
-  - name: Install and configure Database
-    include_tasks: "configure_db.yaml"
-    when: inventory_hostname in groups["db"]
 
   - name: Install and configure Apps
     include_tasks: "configure_app.yaml"

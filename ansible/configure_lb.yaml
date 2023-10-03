@@ -3,6 +3,25 @@
     name: "{{ inventory_hostname }}"
     use: "systemd"
 
+- name: Configure Core Params
+  ansible.posix.sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    reload: true
+  loop:
+  - name: net.ipv4.tcp_slow_start_after_idle
+    value: "0"
+  - name: net.ipv4.tcp_mtu_probing
+    value: "0"
+  - name: net.ipv4.tcp_notsent_lowat
+    value: "65536"
+  - name: net.ipv4.ip_local_port_range
+    value: "1024 65535"
+  - name: net.ipv4.tcp_tw_reuse
+    value: "1"
+  - name: net.core.somaxconn
+    value: "81960"
+
 - name: Install Packages
   ansible.builtin.apt: 
     name: "{{ lb_packages }}"
@@ -72,3 +91,4 @@
     group: root
     mode: "0755"
   notify: restart keepalived
+
