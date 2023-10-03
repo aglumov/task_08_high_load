@@ -14,11 +14,11 @@ cc_access_key = "<access key>"
 cc_secret_key = "<secret key>"
 ```
 # Запуск
-```terraform apply```
+В каталоге ```terraform``` выполнить ```terraform apply```
 
 Дождаться запуска вм.
 
-```ansible-playbook setup.yaml```
+В каталоге ```ansible``` выполнить ```ansible-playbook setup.yaml```
 
 # Пояснения
 
