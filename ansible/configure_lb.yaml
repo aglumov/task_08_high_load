@@ -23,26 +23,6 @@
     state: absent
   notify: nginx reload
 
-#- name: Set extended logging
-#  ansible.builtin.blockinfile:
-#    path: "/etc/nginx/nginx.conf"
-#    insertbefore: ".*access_log"
-#    block: |
-#      #
-#              log_format extended '$remote_addr - $remote_user [$time_local] '
-#                    '"$request" $status $body_bytes_sent '
-#                    '"$http_referer" "$http_user_agent" '
-#                    'host=$host request_time=$request_time request_length=$request_length '
-#                    'upstream_addr=$upstream_addr upstream_response_time=$upstream_response_time '
-#                    'upstream_status=$upstream_status realip_remote_addr=$realip_remote_addr';
-#  notify: nginx reload
-
-#- name: Set logging for access_log
-#  ansible.builtin.lineinfile:
-#    path: "/etc/nginx/nginx.conf"
-#    search_string: "access_log"
-#    line: "        access_log /var/log/nginx/access.log extended buffer=16k flush=10s;"
-#  notify: nginx reload
 - name: Copy nginx.conf
   ansible.builtin.copy:
     src: nginx.conf
