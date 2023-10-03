@@ -44,7 +44,7 @@
     when: inventory_hostname in groups["app"]
 
   - name: Install Pacemaker packages and configure hosts
-    include_tasks: "install_pacemaker.yaml"
+    include_tasks: "install_cluster.yaml"
     when: inventory_hostname in groups["app"]
 
   - name: Configure cluster
@@ -52,15 +52,15 @@
     when: inventory_hostname in groups["app"]
 
   - name: Install and configure Database
-    include_tasks: "db.yaml"
+    include_tasks: "configure_db.yaml"
     when: inventory_hostname in groups["db"]
 
   - name: Install and configure Apps
-    include_tasks: "app.yaml"
+    include_tasks: "configure_app.yaml"
     when: inventory_hostname in groups["app"]
 
   - name: Install and configure Loadbalancer
-    include_tasks: "lb.yaml"
+    include_tasks: "configure_lb.yaml"
     when: inventory_hostname in groups["lb"]
 
   handlers:

@@ -11,7 +11,7 @@
 
 - name: Configure nginx for proxy to apps
   ansible.builtin.template:
-    src: "lb.conf.j2"
+    src: "templates/lb.conf.j2"
     dest: "/etc/nginx/conf.d/lb.conf"
     owner: www-data
     group: www-data
@@ -25,8 +25,8 @@
 
 - name: Copy nginx.conf
   ansible.builtin.copy:
-    src: nginx.conf
-    dest: /etc/nginx/nginx.conf
+    src: "files/nginx.conf"
+    dest: "/etc/nginx/nginx.conf"
     owner: root
     group: root
     mode: "0644"
@@ -52,12 +52,12 @@
 
 - name: Copy aws cli credentials
   ansible.builtin.copy:
-    src: "aws_credentials.conf"
+    src: "files/aws_credentials.conf"
     dest: "/root/.aws/credentials"    
 
 - name: Configure Keepalived
   ansible.builtin.template:
-    src: "keepalived.conf.j2"
+    src: "templates/keepalived.conf.j2"
     dest: "/etc/keepalived/keepalived.conf"
     owner: root
     group: root
@@ -66,7 +66,7 @@
 
 - name: Configure master script
   ansible.builtin.template:
-    src: "master.sh.j2"
+    src: "templates/master.sh.j2"
     dest: "/etc/keepalived/master.sh"
     owner: root
     group: root

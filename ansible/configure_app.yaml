@@ -18,7 +18,7 @@
 
 - name: Configure nginx for wordpress
   ansible.builtin.copy:
-    src: "wp.conf"
+    src: "files/wp.conf"
     dest: "/etc/nginx/conf.d/wp.conf"
     owner: www-data
     group: www-data
@@ -41,7 +41,7 @@
     
 - name: Configure wordpress
   ansible.builtin.template:
-    src: "wp-config.php.j2"
+    src: "templates/wp-config.php.j2"
     dest: "/var/www/wordpress/wp-config.php"
     owner: "www-data"
     group: "www-data"
