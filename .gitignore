@@ -2,4 +2,5 @@
 *.tfstate
 *.tfstate.*
 *.auto.tfvars
-ansible/aws_credentials.conf
+ansible/files/aws_credentials.conf
+ansible/inventory.ini
